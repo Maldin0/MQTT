@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import { Loader2, AlertCircle, CheckCircle} from "lucide-react"
+import { v4 as uuidv4 } from "uuid"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import mqtt, { IClientOptions, MqttClient, QoS } from "mqtt";
 import { Label } from "@/components/ui/label"
@@ -28,7 +29,7 @@ export const Connection = () => {
     const [host, setHost] = useState("");
     const [port, setPort] = useState("");
     const [ssl, setSsl] = useState(false);
-    const [clientId, setClientId] = useState("");
+    const [clientId, setClientId] = useState(`client_${uuidv4()}`);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [keepAlive, setKeepAlive] = useState(60);
@@ -59,63 +60,75 @@ export const Connection = () => {
         }
       }, [error, success]);
 
-      const handleConnect = () => {
+    const handleConnect = () => {
         if (isConnected && client) {
-          client.end();
-          setIsConnected(false);
-          setSuccess("Successfully disconnected from the server");
-          return;
+            client.end();
+            setIsConnected(false);
+            setSuccess("Successfully disconnected from the server");
+            return;
         }
-    
         const protocol = ssl ? 'wss' : 'ws';
         const brokerUrl = `${protocol}://${host}:${port}`;
-    
+        
         const lwtOptions = {
             topic: lwtTopic,
-            payload: Buffer.from(lwtMessage),
+            payload: Buffer.from(lwtMessage), // Convert string to Buffer
             qos: lwtQos,
             retain: lwtRetain
         };
-    
+        
         const options: IClientOptions = {
             clientId: clientId,
             keepalive: keepAlive,
             clean: cleanSession,
             username: username,
             password: password,
-            will: lwtOptions
+            will: lwtOptions,
+            reconnectPeriod: 0 // Disable automatic reconnection
         };
-        try {
-            setIsConnecting(true);
-            const newClient = mqtt.connect(brokerUrl, options);
-            newClient.on("connect", () => {
-                setIsConnecting(false);
-                setIsConnected(true);
-                setClient(newClient);
-                setError(""); // Clear any previous errors
-                setSuccess("Successfully connected to the server");
-                console.log("connected");
-            });
-        } catch (error) {
-            client?.on("error", (error) => {
-                setIsConnecting(false);
-                setIsConnected(false);
-            });
-            if (error instanceof Error) {
-                setError(error.message);
-            } else {
-                setError(String(error));
-            }
+        
+        console.log(brokerUrl);
+        console.log(options);
+        
+        setIsConnecting(true);
+        const newClient = mqtt.connect(brokerUrl, options);
+        
+        newClient.on("connect", () => {
+            setIsConnecting(false);
+            setIsConnected(true);
+            setClient(newClient);
+            setError(""); // Clear any previous errors
+            setSuccess("Successfully connected to the server");
+            console.log("connected");
+        });
+        
+        newClient.on("error", (error) => {
+            setIsConnecting(false);
+            setIsConnected(false);
+            setError(`Connection error: ${error.message}`);
             console.log("error", error);
-
-            client?.on("close", () => {
-                setIsConnected(false);
-                setIsConnecting(false);
-                setError("The connection has been closed by the server");
-                console.log("disconnected");
-            });
-        }
-      };
+        });
+        
+        newClient.on("close", () => {
+            setIsConnecting(false);
+            setIsConnected(false);
+            setError("The connection has been closed by the server");
+            console.log("disconnected");
+        });
+        
+        newClient.on("offline", () => {
+            setIsConnecting(false);
+            setIsConnected(false);
+            setError("The client is offline");
+            console.log("offline");
+        });
+        
+        newClient.on("reconnect", () => {
+            setIsConnecting(true);
+            setError("Attempting to reconnect...");
+            console.log("reconnecting");
+        });
+    };
 
     return (
         <Accordion type="multiple" className="w-full">
