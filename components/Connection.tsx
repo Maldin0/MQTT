@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react"
 import { Loader2, AlertCircle, CheckCircle} from "lucide-react"
 import { v4 as uuidv4 } from "uuid"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import mqtt, { IClientOptions, MqttClient, QoS } from "mqtt";
+import mqtt, { IClientOptions, MqttClient, QoS, IConnectPacket } from "mqtt";
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import {
@@ -34,7 +34,7 @@ export const Connection = () => {
     const [password, setPassword] = useState("");
     const [keepAlive, setKeepAlive] = useState(60);
     const [cleanSession, setCleanSession] = useState(true);
-    const [lwtTopic, setLwtTopic] = useState("");
+    const [lwtTopic, setLwtTopic] = useState("lwtTopic/default");
     const [lwtMessage, setLwtMessage] = useState("");
     const [lwtQos, setLwtQos] = useState<QoS>(0);
     const [lwtRetain, setLwtRetain] = useState(false);
@@ -70,7 +70,7 @@ export const Connection = () => {
         const protocol = ssl ? 'wss' : 'ws';
         const brokerUrl = `${protocol}://${host}:${port}`;
         
-        const lwtOptions = {
+        const lwtOptions : IConnectPacket['will'] = {
             topic: lwtTopic,
             payload: Buffer.from(lwtMessage), // Convert string to Buffer
             qos: lwtQos,
@@ -91,7 +91,7 @@ export const Connection = () => {
         console.log(options);
         
         setIsConnecting(true);
-        const newClient = mqtt.connect(brokerUrl, options);
+        const newClient = mqtt.connect("ws://localhost:9001", options);
         
         newClient.on("connect", () => {
             setIsConnecting(false);
@@ -220,7 +220,7 @@ export const Connection = () => {
                         </div>
                         <div className="col-span-1">
                             <Label htmlFor="lwtRetain">Last-Will Retain</Label>
-                            <Input className="w-5 h-5 m-2" type="checkbox" id="lwtRetain" />
+                            <Input className="w-5 h-5 m-2" type="checkbox" id="lwtRetain" checked={lwtRetain} onChange={(e) => setLwtRetain(e.target.checked)} />
                         </div>
                         <div className="col-span-9">
                             <Label htmlFor="lwtMessage">Last-Will Message</Label>
