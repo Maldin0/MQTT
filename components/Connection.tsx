@@ -4,7 +4,8 @@ import { useEffect, useRef, useState } from "react"
 import { Loader2, AlertCircle, CheckCircle} from "lucide-react"
 import { v4 as uuidv4 } from "uuid"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import mqtt, { IClientOptions, MqttClient, QoS, IConnectPacket } from "mqtt";
+import mqtt, { IClientOptions, MqttClient} from "mqtt";
+import QoS from "mqtt-packet";
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import {
@@ -36,7 +37,7 @@ export const Connection = () => {
     const [cleanSession, setCleanSession] = useState(true);
     const [lwtTopic, setLwtTopic] = useState("lwtTopic/default");
     const [lwtMessage, setLwtMessage] = useState("");
-    const [lwtQos, setLwtQos] = useState<QoS>(0);
+    const [lwtQos, setLwtQos] = useState<QoS.QoS>(0);
     const [lwtRetain, setLwtRetain] = useState(false);
     const [isConnecting, setIsConnecting] = useState(false);
     const [isConnected, setIsConnected] = useState(false);
@@ -70,7 +71,7 @@ export const Connection = () => {
         const protocol = ssl ? 'wss' : 'ws';
         const brokerUrl = `${protocol}://${host}:${port}`;
         
-        const lwtOptions : IConnectPacket['will'] = {
+        const lwtOptions : IClientOptions['will'] = {
             topic: lwtTopic,
             payload: Buffer.from(lwtMessage), // Convert string to Buffer
             qos: lwtQos,
@@ -91,7 +92,7 @@ export const Connection = () => {
         console.log(options);
         
         setIsConnecting(true);
-        const newClient = mqtt.connect("ws://localhost:9001", options);
+        const newClient = mqtt.connect(brokerUrl, options);
         
         newClient.on("connect", () => {
             setIsConnecting(false);
@@ -112,7 +113,8 @@ export const Connection = () => {
         newClient.on("close", () => {
             setIsConnecting(false);
             setIsConnected(false);
-            setError("The connection has been closed by the server");
+            setError("");
+            setSuccess("Successfully disconnected to the server");
             console.log("disconnected");
         });
         
@@ -207,7 +209,7 @@ export const Connection = () => {
                         </div>
                         <div className="col-span-1">
                             <Label>Last-Will QoS</Label>
-                            <Select value={lwtQos} onValueChange={(e)=>setLwtQos(e)}>
+                            <Select value={lwtQos.toString()} onValueChange={(e)=>setLwtQos(e as unknown as QoS.QoS)}>
                                 <SelectTrigger>
                                     <SelectValue placeholder="QoS" />
                                 </SelectTrigger>
