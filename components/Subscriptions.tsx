@@ -1,20 +1,22 @@
 import {
-	Accordion,
-	AccordionContent,
-	AccordionItem,
-	AccordionTrigger,
-  } from "@/components/ui/accordion"
-import { Button } from "@/components/ui/button"
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+} from "@/components/ui/accordion"
+import { MqttSubscriptionCard } from './mqtt-subscription-card'
 
 export const Subscriptions = () => {
     return (
         <Accordion type="multiple" className="w-full">
             <AccordionItem value="subscriptions">
                 <AccordionTrigger>
-                <a className="text-xl font-bold">Subscriptions</a>
+                    <a className="text-xl font-bold">Subscriptions</a>
                 </AccordionTrigger>
                 <AccordionContent>
-                    Nuh uh
+                    <div className="container mx-auto p-4">
+                        <MqttSubscriptionCard />
+                    </div>
                 </AccordionContent>
             </AccordionItem>
         </Accordion>
