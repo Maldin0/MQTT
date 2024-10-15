@@ -10,16 +10,24 @@ export interface Subscription {
 }
 
 export function useSubscriptions() {
-    const [subscriptions, setSubscriptions] = useState<Subscription[]>(() => {
-        // Load subscriptions from local storage
-        const savedSubscriptions = localStorage.getItem('subscriptions');
-        return savedSubscriptions ? JSON.parse(savedSubscriptions) : [];
-    });
+    const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
 
     const [messages, setMessages] = useState<Message[]>([]);
 
+    // called when component mounts only (initial render)
     useEffect(() => {
-        // Save subscriptions to local storage whenever they change
+        // load subscriptions
+        const savedSubscriptions = localStorage.getItem('subscriptions');
+
+        if (savedSubscriptions) {
+            console.log("Saved subscriptions:", savedSubscriptions);
+            setSubscriptions(JSON.parse(savedSubscriptions));
+        }
+    }, []);
+
+    // called when subscriptions change only
+    useEffect(() => {
+        // save subscriptions
         localStorage.setItem('subscriptions', JSON.stringify(subscriptions));
     }, [subscriptions]);
 
