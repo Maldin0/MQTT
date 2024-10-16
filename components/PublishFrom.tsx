@@ -4,14 +4,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import QoS from "mqtt-packet";
+import { QoS } from "mqtt-packet";
 
 interface PublishFormProps {
-    onPublish: (topic: string, message: string, qos: QoS.QoS, retain: boolean) => void;
+    onPublish: (topic: string, message: string, qos: QoS, retain: boolean) => void;
 }
 
 export const PublishForm: React.FC<PublishFormProps> = ({ onPublish }) => {
-    const [selectedValue, setSelectedValue] = useState<QoS.QoS>(2);
+    const [selectedValue, setSelectedValue] = useState<QoS>(2);
     const [retain, setRetain] = useState(false);
     const [topic, setTopic] = useState("");
     const [message, setMessage] = useState("");
@@ -35,7 +35,7 @@ export const PublishForm: React.FC<PublishFormProps> = ({ onPublish }) => {
             </div>
             <div className="space-y-2 col-span-1">
                 <Label>QoS</Label>
-                <Select value={selectedValue.toString()} onValueChange={(e) => setSelectedValue(e as unknown as QoS.QoS)}>
+                <Select value={selectedValue.toString()} onValueChange={(e) => setSelectedValue(Number(e) as QoS)}>
                     <SelectTrigger>
                         <SelectValue placeholder="QoS" />
                     </SelectTrigger>

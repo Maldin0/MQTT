@@ -35,6 +35,7 @@ export function useSubscriptions() {
             timestamp: new Date(),
             color: subscriptions.find(sub => sub.topic === topic)?.color || 'white',
         };
+        console.log(newMessage);
         return [...prevMessages, newMessage].slice(-100);
     });
 }, [subscriptions]);
@@ -87,7 +88,7 @@ export function useSubscriptions() {
     messages,
     handleSubscribe,
     handleRemoveSubscription,
-    handleMessage, // Export handleMessage
+    handleMessage,
   };
 }
 

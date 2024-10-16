@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
-import QoS from "mqtt-packet";
+import { QoS } from "mqtt-packet/types";
 import { useSubscriptions, Subscription } from "../hooks/useMqttSubscription";
 
 function getRandomColor(): string {
@@ -20,7 +20,7 @@ function getRandomColor(): string {
 
 export function MqttSubscriptionCard() {
     const [color, setColor] = useState(getRandomColor());
-    const [qos, setQos] = useState<QoS.QoS>(2);
+    const [qos, setQos] = useState<QoS>(2);
     const [topic, setTopic] = useState("");
     const { subscriptions, handleSubscribe, handleRemoveSubscription } = useSubscriptions();
     const [mounted, setMounted] = useState(false);
@@ -77,7 +77,7 @@ export function MqttSubscriptionCard() {
                 </div>
                 <div className="space-y-2">
                     <Label>QoS</Label>
-                    <Select value={qos.toString()} onValueChange={(e) => setQos(e as unknown as QoS.QoS)}>
+                    <Select value={qos.toString()} onValueChange={(e) => setQos(Number(e) as QoS)}>
                         <SelectTrigger>
                             <SelectValue placeholder="QoS" />
                         </SelectTrigger>
