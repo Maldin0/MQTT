@@ -72,11 +72,20 @@ const config: Config = {
   				to: {
   					height: '0'
   				}
-  			}
+  			},
+			'fadeOut': {
+				from: {
+					opacity: '1'
+				},
+				to: {
+					opacity: '0'
+				}
+			},
   		},
   		animation: {
   			'accordion-down': 'accordion-down 0.2s ease-out',
-  			'accordion-up': 'accordion-up 0.2s ease-out'
+  			'accordion-up': 'accordion-up 0.2s ease-out',
+			'fade-out': 'fadeOut 3s ease-out',
   		}
   	}
   },

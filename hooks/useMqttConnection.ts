@@ -20,30 +20,28 @@ export function useMqttConnection() {
     const [lwtRetain, setLwtRetain] = useState(false);
     const [isConnecting, setIsConnecting] = useState(false);
     const [isConnected, setIsConnected] = useState(false);
-    const [error, setError] = useState("");
-    const [success, setSuccess] = useState("");
+    const [text, setText] = useState("");
     const [visible, setVisible] = useState(false);
 
     useEffect(() => {
-        if (error || success) {
+        if (text) {
             setVisible(true);
             const timer = setTimeout(() => {
                 setVisible(false);
                 setTimeout(() => {
-                    setError("");
-                    setSuccess("");
+                    setText("");
                 }, 500); // Wait for the transition to complete
             }, 3000); // Show the alert for 3 seconds
 
             return () => clearTimeout(timer);
         }
-    }, [error, success]);
+    }, [text]);
 
     const handleConnect = () => {
         if (isConnected && client) {
             client.end();
             setIsConnected(false);
-            setSuccess("Successfully disconnected from the server");
+            setText("Successfully disconnected from the server");
             return;
         }
         const protocol = ssl ? "wss" : "ws";
@@ -76,36 +74,34 @@ export function useMqttConnection() {
             setIsConnecting(false);
             setIsConnected(true);
             client = newClient;
-            setError(""); // Clear any previous errors
-            setSuccess("Successfully connected to the server");
+            setText("Successfully connected to the server");
             console.log("connected");
         });
 
         newClient.on("error", (error) => {
             setIsConnecting(false);
             setIsConnected(false);
-            setError(`Connection error: ${error.message}`);
+            setText(`Connection error: ${error.message}`);
             console.log("error", error);
         });
 
         newClient.on("close", () => {
             setIsConnecting(false);
             setIsConnected(false);
-            setError("");
-            setSuccess("Successfully disconnected to the server");
+            setText("Disconnected to the server");
             console.log("disconnected");
         });
 
         newClient.on("offline", () => {
             setIsConnecting(false);
             setIsConnected(false);
-            setError("The client is offline");
+            setText("The client is offline");
             console.log("offline");
         });
 
         newClient.on("reconnect", () => {
             setIsConnecting(true);
-            setError("Attempting to reconnect...");
+            setText("Attempting to reconnect...");
             console.log("reconnecting");
         });
     };
@@ -114,6 +110,6 @@ export function useMqttConnection() {
         host, setHost, port, setPort, clientId, setClientId, username, setUsername, password, setPassword,
         keepAlive, setKeepAlive, ssl, setSsl, cleanSession, setCleanSession, lwtTopic, setLwtTopic,
         lwtMessage, setLwtMessage, lwtQos, setLwtQos, lwtRetain, setLwtRetain, isConnecting, isConnected,
-        error, success, visible, handleConnect
+        text: text, visible, handleConnect
     };
 }
