@@ -52,7 +52,7 @@ export const PublishForm: React.FC<PublishFormProps> = ({ onPublish }) => {
                 <Checkbox
                     id="retain"
                     checked={retain}
-                    onCheckedChange={(v) => setRetain(v as boolean)}
+                    onCheckedChange={(v: boolean) => setRetain(v)}
                     className="w-5 h-5 m-2"
                 />
             </div>
