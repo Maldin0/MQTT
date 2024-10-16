@@ -1,6 +1,6 @@
 "use client"
 
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {

@@ -4,7 +4,7 @@ import { Publish } from "@/components/Publish";
 import { Subscriptions } from "@/components/Subscriptions";
 import { MqttAccordionMessageBox } from "@/components/mqtt-accordion-message-box";
 import { MqttProvider } from "@/components/mqttContext";
-import { Footer } from "@/components/footer";
+import { Footer } from "@/components/Footer";
 export default function Home() {
   return (
     <MqttProvider>

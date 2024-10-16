@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import { QoS } from "mqtt-packet/types";
-import { useSubscriptions, Subscription } from "../hooks/useMqttSubscription";
+import { useSubscriptions } from "../hooks/useMqttSubscription";
 
 function getRandomColor(): string {
     const letters = '0123456789ABCDEF';
