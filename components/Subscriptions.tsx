@@ -14,7 +14,7 @@ export const Subscriptions = () => {
                     <a className="text-xl font-bold">Subscriptions</a>
                 </AccordionTrigger>
                 <AccordionContent>
-                    <div className="container mx-auto p-4 bg-zinc-900">
+                    <div className="container mx-auto p-4 dark:border dark:border-zinc-800 dark:rounded-md">
                         <MqttSubscriptionCard />
                     </div>
                 </AccordionContent>

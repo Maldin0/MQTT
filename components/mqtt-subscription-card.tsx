@@ -42,7 +42,7 @@ export function MqttSubscriptionCard() {
     if (!mounted) return null;
 
     return (
-        <Card className="w-full max-w-md border-zinc-600 bg-zinc-800 text-white rounded-sm">
+        <Card className="w-full max-w-md dark:border-zinc-800 dark:text-white rounded-sm">
             <CardHeader>
                 <CardTitle className="text-2xl">MQTT Subscription</CardTitle>
             </CardHeader>
@@ -55,7 +55,8 @@ export function MqttSubscriptionCard() {
                             type="color"
                             value={color}
                             onChange={(e) => setColor(e.target.value)}
-                            className="h-10 w-10 p-1 rounded-md"
+                            className="h-10 w-15 p-0 border-0 appearance-none"
+                            style={{ backgroundColor: color }}
                         />
                         <Input
                             type="text"

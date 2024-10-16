@@ -1,5 +1,6 @@
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -42,7 +43,7 @@ export const ConnectionForm: React.FC<ConnectionFormProps> = ({
     lwtMessage, setLwtMessage, lwtQos, setLwtQos, lwtRetain, setLwtRetain, isConnecting, isConnected, handleConnect
 }) => {
     return (
-        <div className="grid grid-cols-9 gap-4 p-6 bg-zinc-900">
+        <div className="grid grid-cols-9 gap-4 p-6 dark:border dark:border-zinc-800 dark:rounded-md">
             <div className="col-span-4">
                 <Label htmlFor="host">Host</Label>
                 <Input type="url" id="host" value={host} onChange={(e) => setHost(e.target.value)} />
@@ -60,7 +61,7 @@ export const ConnectionForm: React.FC<ConnectionFormProps> = ({
                     variant={isConnected ? "default" : "destructive"} 
                     onClick={handleConnect} 
                     disabled={isConnecting}  
-                    className={`${!isConnected ? "bg-green-500 hover:bg-green-600" : "bg-red-500 hover:bg-red-600"} w-full select-none`}
+                    className={`${!isConnected ? "bg-green-500 hover:bg-green-600" : "bg-red-500 hover:bg-red-600"} w-full select-none dark:text-black`}
                 >
                     {isConnecting ? (
                         <>
@@ -86,15 +87,18 @@ export const ConnectionForm: React.FC<ConnectionFormProps> = ({
                 <Label htmlFor="keepAlive">Keep Alive</Label>
                 <Input type="number" id="keepAlive" value={keepAlive} onChange={(e) => setKeepAlive(parseInt(e.target.value))} />
             </div>
-            <div className="col-span-1">
-                <Label htmlFor="ssl">SSL</Label>
-                <Input className="w-5 h-5 m-2" type="checkbox" id="ssl" checked={ssl} onChange={(e) => setSsl(e.target.checked)} />
+            <div className="col-span-2">
+                <div className="flex flex-row items-start space-x-3">
+                    <Checkbox className="w-5 h-5 m-2" id="ssl" checked={ssl} onCheckedChange={setSsl} />
+                    <Label htmlFor="ssl" className="my-auto">SSL</Label>
+                </div>
+            
+                <div className="flex flex-row items-start space-x-3">
+                    <Checkbox className="w-5 h-5 m-2" id="cleanSession" checked={cleanSession} onCheckedChange={setCleanSession} />
+                    <Label htmlFor="cleanSession" className="my-auto">Clean Session</Label>
+                </div>
             </div>
-            <div className="col-span-1">
-                <Label htmlFor="cleanSession">Clean Session</Label>
-                <Input className="w-5 h-5 m-2" type="checkbox" id="cleanSession" checked={cleanSession} onChange={(e) => setCleanSession(e.target.checked)} />
-            </div>
-            <div className="col-span-7">
+            <div className="col-span-5">
                 <Label htmlFor="lwtTopic">Last-Will Topic</Label>
                 <Input type="text" id="lwtTopic" value={lwtTopic} onChange={(e) => setLwtTopic(e.target.value)} />
             </div>
@@ -111,9 +115,11 @@ export const ConnectionForm: React.FC<ConnectionFormProps> = ({
                     </SelectContent>
                 </Select>
             </div>
-            <div className="col-span-1">
-                <Label htmlFor="lwtRetain">Last-Will Retain</Label>
-                <Input className="w-5 h-5 m-2" type="checkbox" id="lwtRetain" checked={lwtRetain} onChange={(e) => setLwtRetain(e.target.checked)} />
+        <div className="col-span-3">
+            <div className="flex flex-row items-start space-x-3 mt-5">
+                <Checkbox className="w-5 h-5 m-2" id="lwtRetain" checked={lwtRetain} onCheckedChange={setLwtRetain} />
+                <Label htmlFor="lwtRetain" className="my-auto">Last-Will Retain</Label>
+            </div>
             </div>
             <div className="col-span-9">
                 <Label htmlFor="lwtMessage">Last-Will Message</Label>
