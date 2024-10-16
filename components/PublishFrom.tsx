@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { QoS } from "mqtt-packet";
@@ -48,11 +49,10 @@ export const PublishForm: React.FC<PublishFormProps> = ({ onPublish }) => {
             </div>
             <div className="col-span-1">
                 <Label htmlFor="retain">Retain</Label>
-                <Input
+                <Checkbox
                     id="retain"
-                    type="checkbox"
                     checked={retain}
-                    onChange={(e) => setRetain(e.target.checked)}
+                    onCheckedChange={(v) => setRetain(v as boolean)}
                     className="w-5 h-5 m-2"
                 />
             </div>

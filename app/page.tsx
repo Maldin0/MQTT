@@ -8,9 +8,9 @@ import { Footer } from "@/components/footer";
 export default function Home() {
   return (
     <MqttProvider>
-      <div className="flex flex-col bg-zinc-800">
+      <div className="flex flex-col">
         <Navbar />
-        <div className="w-full h-[80px]"></div>
+        <div className="w-full h-[50px]"></div>
         <div className="max-w-screen-xl w-full xl:px-0 px-8 self-center min-h-[65vh]">
           <Connection />
           <div className="grid md:grid-cols-3 grid-cols-1 md:gap-x-4">

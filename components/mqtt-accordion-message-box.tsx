@@ -28,14 +28,14 @@ export function MqttAccordionMessageBox() {
             <AccordionItem value="messages">
                 <AccordionTrigger className="text-xl font-bold">Messages</AccordionTrigger>
                 <AccordionContent>
-                    <Card className="w-full bg-zinc-900 border-none rounded-sm">
+                    <Card className="w-full dark:border dark:border-zinc-800 dark:rounded-md">
                         <CardContent className="p-4">
-                            <h2 className="text-xl font-semibold mb-4 text-white">MQTT Messages</h2>
-                            <ScrollArea className="h-[400px] w-full bg-zinc-950 border border-zinc-600 rounded-md flex flex-col gap-y-4">
+                            <h2 className="text-xl font-semibold mb-4 dark:text-white">MQTT Messages</h2>
+                            <ScrollArea className="h-[400px] w-full dark:bg-zinc-950 rounded-md flex flex-col gap-y-4">
                                 {messages.map((message, index) => (
                                     <div
                                         key={index}
-                                        className="rounded-lg p-2"
+                                        className="rounded-lg p-2 m-2"
                                         style={{ backgroundColor: message.color, color: isColorLight(message.color) ? 'black' : 'white' }}
                                     >
                                         <div className="font-bold">{message.topic}</div>
