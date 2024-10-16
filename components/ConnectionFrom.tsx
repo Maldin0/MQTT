@@ -35,26 +35,29 @@ interface ConnectionFormProps {
     isConnecting: boolean;
     isConnected: boolean;
     handleConnect: () => void;
+    isClientIdDisabled: boolean;
+    isFormDisabled: boolean;
 }
 
 export const ConnectionForm: React.FC<ConnectionFormProps> = ({
     host, setHost, port, setPort, clientId, setClientId, username, setUsername, password, setPassword,
     keepAlive, setKeepAlive, ssl, setSsl, cleanSession, setCleanSession, lwtTopic, setLwtTopic,
-    lwtMessage, setLwtMessage, lwtQos, setLwtQos, lwtRetain, setLwtRetain, isConnecting, isConnected, handleConnect
+    lwtMessage, setLwtMessage, lwtQos, setLwtQos, lwtRetain, setLwtRetain, isConnecting, isConnected, handleConnect, 
+    isClientIdDisabled, isFormDisabled
 }) => {
     return (
         <div className="grid grid-cols-9 gap-4 p-6 dark:border dark:border-zinc-800 dark:rounded-md">
             <div className="col-span-4">
                 <Label htmlFor="host">Host</Label>
-                <Input type="url" id="host" value={host} onChange={(e) => setHost(e.target.value)} />
+                <Input type="url" id="host" value={host} onChange={(e) => setHost(e.target.value)} disabled={isFormDisabled}/>
             </div>
             <div className="col-span-1">
                 <Label htmlFor="port">Port</Label>
-                <Input type="number" id="port" value={port} onChange={(e) => setPort(e.target.value)} />
+                <Input type="number" id="port" value={port} onChange={(e) => setPort(e.target.value)} disabled={isFormDisabled}/>
             </div>
             <div className="col-span-3">
                 <Label htmlFor="clientID">ClientID</Label>
-                <Input type="text" id="clientID" value={clientId} onChange={(e) => setClientId(e.target.value)} />
+                <Input type="text" id="clientID" value={clientId} onChange={(e) => setClientId(e.target.value)} disabled={isClientIdDisabled || isFormDisabled} />
             </div>
             <div className="col-span-1 flex justify-start items-end">
                 <Button 
@@ -77,34 +80,34 @@ export const ConnectionForm: React.FC<ConnectionFormProps> = ({
             </div>
             <div className="col-span-3">
                 <Label htmlFor="username">Username</Label>
-                <Input type="text" id="username" value={username} onChange={(e) => setUsername(e.target.value)} />
+                <Input disabled={isFormDisabled} type="text" id="username" value={username} onChange={(e) => setUsername(e.target.value)} />
             </div>
             <div className="col-span-3">
                 <Label htmlFor="password">Password</Label>
-                <Input type="text" id="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                <Input disabled={isFormDisabled} type="text" id="password" value={password} onChange={(e) => setPassword(e.target.value)} />
             </div>
             <div className="col-span-1">
                 <Label htmlFor="keepAlive">Keep Alive</Label>
-                <Input type="number" id="keepAlive" value={keepAlive} onChange={(e) => setKeepAlive(parseInt(e.target.value))} />
+                <Input disabled={isFormDisabled} type="number" id="keepAlive" value={keepAlive} onChange={(e) => setKeepAlive(parseInt(e.target.value))} />
             </div>
             <div className="col-span-2">
                 <div className="flex flex-row items-start space-x-3">
-                    <Checkbox className="w-5 h-5 m-2" id="ssl" checked={ssl} onCheckedChange={setSsl} />
+                    <Checkbox disabled={isFormDisabled} className="w-5 h-5 m-2" id="ssl" checked={ssl} onCheckedChange={setSsl} />
                     <Label htmlFor="ssl" className="my-auto">SSL</Label>
                 </div>
             
                 <div className="flex flex-row items-start space-x-3">
-                    <Checkbox className="w-5 h-5 m-2" id="cleanSession" checked={cleanSession} onCheckedChange={setCleanSession} />
+                    <Checkbox disabled={isFormDisabled} className="w-5 h-5 m-2" id="cleanSession" checked={cleanSession} onCheckedChange={setCleanSession} />
                     <Label htmlFor="cleanSession" className="my-auto">Clean Session</Label>
                 </div>
             </div>
             <div className="col-span-5">
                 <Label htmlFor="lwtTopic">Last-Will Topic</Label>
-                <Input type="text" id="lwtTopic" value={lwtTopic} onChange={(e) => setLwtTopic(e.target.value)} />
+                <Input disabled={isFormDisabled} type="text" id="lwtTopic" value={lwtTopic} onChange={(e) => setLwtTopic(e.target.value)} />
             </div>
             <div className="col-span-1">
                 <Label>Last-Will QoS</Label>
-                <Select value={lwtQos.toString()} onValueChange={(e) => setLwtQos(e as unknown as QoS)}>
+                <Select disabled={isFormDisabled} value={lwtQos.toString()} onValueChange={(e) => setLwtQos(e as unknown as QoS)}>
                     <SelectTrigger>
                         <SelectValue placeholder="QoS" />
                     </SelectTrigger>
@@ -117,13 +120,13 @@ export const ConnectionForm: React.FC<ConnectionFormProps> = ({
             </div>
         <div className="col-span-3">
             <div className="flex flex-row items-start space-x-3 mt-5">
-                <Checkbox className="w-5 h-5 m-2" id="lwtRetain" checked={lwtRetain} onCheckedChange={setLwtRetain} />
+                <Checkbox disabled={isFormDisabled} className="w-5 h-5 m-2" id="lwtRetain" checked={lwtRetain} onCheckedChange={setLwtRetain} />
                 <Label htmlFor="lwtRetain" className="my-auto">Last-Will Retain</Label>
             </div>
             </div>
             <div className="col-span-9">
                 <Label htmlFor="lwtMessage">Last-Will Message</Label>
-                <Textarea id="lwtMessage" value={lwtMessage} onChange={(e) => setLwtMessage(e.target.value)} />
+                <Textarea disabled={isFormDisabled} id="lwtMessage" value={lwtMessage} onChange={(e) => setLwtMessage(e.target.value)} />
             </div>
         </div>
     );

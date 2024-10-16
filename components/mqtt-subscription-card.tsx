@@ -35,10 +35,6 @@ export function MqttSubscriptionCard() {
         setColor(getRandomColor());
     };
 
-    useEffect(() => {
-        console.log(subscriptions);
-    }, [subscriptions])
-
     if (!mounted) return null;
 
     return (

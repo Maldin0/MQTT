@@ -9,8 +9,10 @@ import {
 } from "@/components/ui/accordion";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle, CheckCircle, Loader2 } from "lucide-react";
+import { HomeProps } from "@/types/Props";
+import { useEffect, useState } from "react";
 
-export const Connection = () => {
+export const Connection = ({ params }:HomeProps) => {
     const {
         host,
         setHost,
@@ -41,10 +43,19 @@ export const Connection = () => {
         text,
         visible,
         handleConnect,
-    } = useMqttConnection();
+    } = useMqttConnection(params);
 
+    const [accordionValue, setAccordionValue] = useState<string[]>(["connection"]);
+
+    useEffect(() => {
+        if (isConnected) {
+            setAccordionValue([]);
+        }
+    }, [isConnected]);
+
+    
     return (
-        <Accordion type="multiple" className="w-full" defaultValue={["connection"]}>
+        <Accordion type="multiple" className="w-full" value={accordionValue} onValueChange={setAccordionValue}>
             <AccordionItem value="connection">
                 <AccordionTrigger>
                     <div className="flex items-center space-x-2">
@@ -89,24 +100,11 @@ export const Connection = () => {
                         isConnecting={isConnecting}
                         isConnected={isConnected}
                         handleConnect={handleConnect}
+                        isClientIdDisabled={true}
+                        isFormDisabled={isConnected}
                     />
                 </AccordionContent>
             </AccordionItem>
-            {false && (
-                <div
-                    className={`fixed bottom-0 left-0 w-full transition-opacity duration-500 ${visible ? "opacity-100" : "opacity-0"
-                        }`}
-                >
-                    <Alert
-                        variant="destructive"
-                        className="mt-4 bg-red-100 border border-red-400 text-red-700"
-                    >
-                        <AlertCircle className="h-4 w-4" />
-                        <AlertTitle className="font-bold">Error</AlertTitle>
-                        <AlertDescription>{}</AlertDescription>
-                    </Alert>
-                </div>
-            )}
             {text && visible && (
                 <div
                     className={`fixed bottom-0 left-0 w-full animate-fade-out z-50 pointer-events-none`}
@@ -115,7 +113,7 @@ export const Connection = () => {
                         variant="default"
                         className={`mt-4 ${text.includes("Success")? "bg-green-100 border border-green-400 text-green-700" : "bg-red-100 border border-red-400 text-red-700"}`}
                     >
-                        {text.includes("Success")? <CheckCircle className="h-4 w-4" /> : <AlertCircle className="h-4 w-4" />}
+                        {text.includes("Success")? <CheckCircle color="#15803d" className="h-4 w-4" /> : <AlertCircle color="#b91c1c" className="h-4 w-4" />}
 
                         <AlertTitle className="font-bold">{text.includes("Success")? "Success" : "! Heads Up !"}</AlertTitle>
                         <AlertDescription>

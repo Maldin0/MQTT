@@ -2,14 +2,13 @@ import { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import mqtt, { IClientOptions, MqttClient } from "mqtt";
 import { QoS } from "mqtt-packet";
-
 export let client: MqttClient | null = null;
-
-export function useMqttConnection() {
+import { HomeProps } from "@/types/Props";
+export function useMqttConnection(params?: HomeProps["params"]) {
     const [host, setHost] = useState("161.246.49.10");
     const [port, setPort] = useState("1883");
     const [ssl, setSsl] = useState(false);
-    const [clientId, setClientId] = useState(`client_${uuidv4()}`);
+    const [clientId, setClientId] = useState(params?.["client-id"]||`client_${uuidv4()}`);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [keepAlive, setKeepAlive] = useState(60);
@@ -63,9 +62,6 @@ export function useMqttConnection() {
             will: lwtOptions,
             reconnectPeriod: 0, // Disable automatic reconnection
         };
-
-        console.log(brokerUrl);
-        console.log(options);
 
         setIsConnecting(true);
         const newClient = mqtt.connect(brokerUrl, options);
