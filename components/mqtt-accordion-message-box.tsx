@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
@@ -11,20 +11,25 @@ import {
 } from "@/components/ui/accordion";
 import { useSubscriptions } from "../hooks/useMqttSubscription";
 import { client } from "../hooks/useMqttConnection";
+import MqttContext from "./mqttContext";
 
 export function MqttAccordionMessageBox() {
-    const { subscriptions, messages, handleMessage } = useSubscriptions();
+    const { messages } = useContext(MqttContext)!;
 
     useEffect(() => {
         if (client) {
-            client.on('message', handleMessage);
+            client.on('message', (topic, message) => {
+                console.log("MQTT Message Received in Hook:", topic, message.toString()); 
+                // ... rest of your handleMessage logic 
+            });
         }
-        return () => {
-            if (client) {
-                client.off('message', handleMessage);
-            }
-        };
-    }, [handleMessage]);
+        // ... cleanup logic
+    }, [client]);
+
+
+    useEffect(() => {
+        console.log("Component Updated Messages:", messages);
+    }, [messages]);
 
     return (
         <Accordion type="single" collapsible className="w-full">

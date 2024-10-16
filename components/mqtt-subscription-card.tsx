@@ -50,19 +50,19 @@ export function MqttSubscriptionCard() {
             <CardContent className="space-y-4">
                 <div className="space-y-2">
                     <Label htmlFor="color-picker">Color</Label>
-                    <div className="flex items-center space-x-2">
+                    <div className="flex items-center space-x-2 flex-shrink-0">
                         <Input
                             id="color-picker"
                             type="color"
                             value={color}
                             onChange={(e) => setColor(e.target.value)}
-                            className="w-12 h-12 p-1 rounded-md"
+                            className="size-12 p-1 rounded-md"
                         />
                         <Input
                             type="text"
                             value={color}
                             onChange={(e) => setColor(e.target.value)}
-                            className="w-full"
+                            className="max-w-full"
                         />
                     </div>
                 </div>
