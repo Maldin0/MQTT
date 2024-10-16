@@ -42,7 +42,7 @@ export const ConnectionForm: React.FC<ConnectionFormProps> = ({
     lwtMessage, setLwtMessage, lwtQos, setLwtQos, lwtRetain, setLwtRetain, isConnecting, isConnected, handleConnect
 }) => {
     return (
-        <div className="grid grid-cols-9 gap-4 p-4">
+        <div className="grid grid-cols-9 gap-4 p-6 bg-zinc-900">
             <div className="col-span-4">
                 <Label htmlFor="host">Host</Label>
                 <Input type="url" id="host" value={host} onChange={(e) => setHost(e.target.value)} />
@@ -55,8 +55,13 @@ export const ConnectionForm: React.FC<ConnectionFormProps> = ({
                 <Label htmlFor="clientID">ClientID</Label>
                 <Input type="text" id="clientID" value={clientId} onChange={(e) => setClientId(e.target.value)} />
             </div>
-            <div className="col-span-1 flex justify-center items-center">
-                <Button variant={isConnected ? "destructive" : "default"} onClick={handleConnect} disabled={isConnecting} className="bg-green-500 hover:bg-green-600">
+            <div className="col-span-1 flex justify-start items-end">
+                <Button 
+                    variant={isConnected ? "default" : "destructive"} 
+                    onClick={handleConnect} 
+                    disabled={isConnecting}  
+                    className={`${!isConnected ? "bg-green-500 hover:bg-green-600" : "bg-red-500 hover:bg-red-600"} w-full select-none`}
+                >
                     {isConnecting ? (
                         <>
                             <Loader2 className="mr-2 h-4 w-4 animate-spin" />

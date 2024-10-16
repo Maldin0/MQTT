@@ -22,7 +22,7 @@ export const PublishForm: React.FC<PublishFormProps> = ({ onPublish }) => {
     };
 
     return (
-        <div className="grid grid-cols-9 gap-4 p-4">
+        <div className="grid grid-cols-9 gap-4 p-8">
             <div className="space-y-2 col-span-6">
                 <Label htmlFor="topic">Topic</Label>
                 <Input

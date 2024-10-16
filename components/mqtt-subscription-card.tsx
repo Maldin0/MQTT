@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import QoS from "mqtt-packet";
 import { useSubscriptions, Subscription } from "../hooks/useMqttSubscription";
-import { log } from "console";
 
 function getRandomColor(): string {
     const letters = '0123456789ABCDEF';
@@ -43,26 +42,26 @@ export function MqttSubscriptionCard() {
     if (!mounted) return null;
 
     return (
-        <Card className="w-full max-w-md">
+        <Card className="w-full max-w-md border-zinc-600 bg-zinc-800 text-white rounded-sm">
             <CardHeader>
-                <CardTitle>MQTT Subscription</CardTitle>
+                <CardTitle className="text-2xl">MQTT Subscription</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
                 <div className="space-y-2">
                     <Label htmlFor="color-picker">Color</Label>
-                    <div className="flex items-center space-x-2">
+                    <div className="flex items-center space-x-2 flex-shrink-0">
                         <Input
                             id="color-picker"
                             type="color"
                             value={color}
                             onChange={(e) => setColor(e.target.value)}
-                            className="w-12 h-12 p-1 rounded-md"
+                            className="h-10 w-10 p-1 rounded-md"
                         />
                         <Input
                             type="text"
                             value={color}
                             onChange={(e) => setColor(e.target.value)}
-                            className="w-full"
+                            className="max-w-full"
                         />
                     </div>
                 </div>
