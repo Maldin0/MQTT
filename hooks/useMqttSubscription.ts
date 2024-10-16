@@ -25,6 +25,11 @@ export function useSubscriptions() {
         }
     }, []);
 
+    useEffect(() => {
+        console.log("Messages updated in hook:", messages);
+    }, [messages]);
+
+
     // called when subscriptions change only
     useEffect(() => {
         // save subscriptions

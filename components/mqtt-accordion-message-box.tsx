@@ -12,11 +12,15 @@ import {
 import { useSubscriptions } from "../hooks/useMqttSubscription"
 
 export function MqttAccordionMessageBox() {
-    const { messages } = useSubscriptions();
+    const { subscriptions, messages } = useSubscriptions();
 
     useEffect(() => {
-        console.log("Messages updated in MqttAccordionMessageBox:", messages);
+        console.log("Messages updated in component:", messages);
     }, [messages]);
+
+    useEffect(() => {
+        console.log("Subscriptions updated in component:", subscriptions);
+    }, [subscriptions]);
 
     return (
         <Accordion type="single" collapsible className="w-full">
