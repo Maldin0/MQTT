@@ -1,26 +1,30 @@
 "use client"
 
 import { useEffect } from "react";
-import { Card, CardContent } from "@/components/ui/card"
-import { ScrollArea } from "@/components/ui/scroll-area"
+import { Card, CardContent } from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
     Accordion,
     AccordionContent,
     AccordionItem,
     AccordionTrigger,
-} from "@/components/ui/accordion"
-import { useSubscriptions } from "../hooks/useMqttSubscription"
+} from "@/components/ui/accordion";
+import { useSubscriptions } from "../hooks/useMqttSubscription";
+import { client } from "../hooks/useMqttConnection";
 
 export function MqttAccordionMessageBox() {
-    const { subscriptions, messages } = useSubscriptions();
+    const { subscriptions, messages, handleMessage } = useSubscriptions();
 
     useEffect(() => {
-        console.log("Messages updated in component:", messages);
-    }, [messages]);
-
-    useEffect(() => {
-        console.log("Subscriptions updated in component:", subscriptions);
-    }, [subscriptions]);
+        if (client) {
+            client.on('message', handleMessage);
+        }
+        return () => {
+            if (client) {
+                client.off('message', handleMessage);
+            }
+        };
+    }, [handleMessage]);
 
     return (
         <Accordion type="single" collapsible className="w-full">
@@ -48,5 +52,5 @@ export function MqttAccordionMessageBox() {
                 </AccordionContent>
             </AccordionItem>
         </Accordion>
-    )
+    );
 }

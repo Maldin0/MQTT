@@ -7,7 +7,7 @@ export let client: MqttClient | null = null;
 
 export function useMqttConnection() {
     const [host, setHost] = useState("161.246.49.10");
-    const [port, setPort] = useState("8883");
+    const [port, setPort] = useState("1883");
     const [ssl, setSsl] = useState(false);
     const [clientId, setClientId] = useState(`client_${uuidv4()}`);
     const [username, setUsername] = useState("");
