@@ -29,8 +29,8 @@ export function useMqttConnection(params?: HomeProps["params"]) {
                 setVisible(false);
                 setTimeout(() => {
                     setText("");
-                }, 500); // Wait for the transition to complete
-            }, 3000); // Show the alert for 3 seconds
+                }, 500);
+            }, 3000);
 
             return () => clearTimeout(timer);
         }
@@ -48,7 +48,7 @@ export function useMqttConnection(params?: HomeProps["params"]) {
 
         const lwtOptions: IClientOptions["will"] = {
             topic: lwtTopic,
-            payload: Buffer.from(lwtMessage), // Convert string to Buffer
+            payload: Buffer.from(lwtMessage),
             qos: lwtQos,
             retain: lwtRetain,
         };
@@ -60,7 +60,7 @@ export function useMqttConnection(params?: HomeProps["params"]) {
             username: username,
             password: password,
             will: lwtOptions,
-            reconnectPeriod: 0, // Disable automatic reconnection
+            reconnectPeriod: 0,
         };
 
         setIsConnecting(true);

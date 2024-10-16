@@ -29,27 +29,42 @@ export function useSubscriptions() {
     const messageString = message.toString(); // Convert Buffer to string
 
     setMessages(prevMessages => {
+        const subscription = subscriptions.find(sub => sub.topic === topic);
+        let color = subscription?.color || '#eeeeee';
+
+        if (!subscription) {
+          // Check for wildcard subscriptions
+          const wildcardSubscription = subscriptions.find(sub => {
+            const wildcardIndex = sub.topic.indexOf('#');
+            if (wildcardIndex === -1) return false;
+            const baseTopic = sub.topic.substring(0, wildcardIndex);
+            return topic.startsWith(baseTopic);
+          });
+          if (wildcardSubscription) {
+            color = wildcardSubscription.color;
+          }
+        }
+
         const newMessage: Message = {
             topic: topic,
-            payload: messageString, // Use the converted string
+            payload: messageString,
             timestamp: new Date(),
-            color: subscriptions.find(sub => sub.topic === topic)?.color || 'white',
+            color: color,
         };
-        console.log(newMessage);
         return [...prevMessages, newMessage].slice(-100);
     });
-}, [subscriptions]);
+}, [subscriptions, setMessages]);
 
   useEffect(() => {
     if (client) {
-      client.on("message", handleMessage); // Attach listener here
+      client.on("message", handleMessage);
     }
     return () => {
       if (client) {
-        client.off("message", handleMessage); // Remove listener on cleanup
+        client.off("message", handleMessage);
       }
     };
-  }, [handleMessage, client]); // Include client in the dependency array
+  }, [handleMessage, client]);
 
   const handleSubscribe = useCallback(
     (topic: string, qos: QoS.QoS, color: string) => {
@@ -91,4 +106,3 @@ export function useSubscriptions() {
     handleMessage,
   };
 }
-
