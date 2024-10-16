@@ -18,7 +18,7 @@ export const Publish = () => {
                     <a className="text-xl font-bold">Publish</a>
                 </AccordionTrigger>
                 <AccordionContent>
-                    <div className="container mx-auto p-4">
+                    <div className="container mx-auto bg-zinc-900">
                         <PublishForm onPublish={handlePublish} />
                     </div>
                 </AccordionContent>

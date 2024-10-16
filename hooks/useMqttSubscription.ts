@@ -50,21 +50,6 @@ export function useSubscriptions() {
     };
   }, [handleMessage, client]); // Include client in the dependency array
 
-  useEffect(() => {
-    console.log("Updated Messages:", messages);
-  }, [messages]);
-
-  useEffect(() => {
-    if (client) {
-      client.on("message", handleMessage);
-    }
-    return () => {
-      if (client) {
-        client.off("message", handleMessage);
-      }
-    };
-  }, [handleMessage]);
-
   const handleSubscribe = useCallback(
     (topic: string, qos: QoS.QoS, color: string) => {
       if (topic && client) {
