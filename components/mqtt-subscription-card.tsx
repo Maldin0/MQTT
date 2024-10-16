@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import QoS from "mqtt-packet";
 import { useSubscriptions, Subscription } from "../hooks/useMqttSubscription";
+import { log } from "console";
 
 function getRandomColor(): string {
     const letters = '0123456789ABCDEF';
@@ -34,6 +35,10 @@ export function MqttSubscriptionCard() {
         setTopic("");
         setColor(getRandomColor());
     };
+
+    useEffect(() => {
+        console.log(subscriptions);
+    }, [subscriptions])
 
     if (!mounted) return null;
 

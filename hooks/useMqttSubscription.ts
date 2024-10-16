@@ -11,30 +11,40 @@ export interface Subscription {
 
 export function useSubscriptions() {
     const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
-
     const [messages, setMessages] = useState<Message[]>([]);
 
-    // called when component mounts only (initial render)
     useEffect(() => {
-        // load subscriptions
         const savedSubscriptions = localStorage.getItem('subscriptions');
-
         if (savedSubscriptions) {
-            console.log("Saved subscriptions:", savedSubscriptions);
             setSubscriptions(JSON.parse(savedSubscriptions));
         }
     }, []);
 
     useEffect(() => {
-        console.log("Messages updated in hook:", messages);
-    }, [messages]);
-
-
-    // called when subscriptions change only
-    useEffect(() => {
-        // save subscriptions
         localStorage.setItem('subscriptions', JSON.stringify(subscriptions));
     }, [subscriptions]);
+
+    const handleMessage = useCallback((topic: string, message: Buffer) => {
+        console.log("Message received:", topic, message.toString());
+        const newMessage: Message = {
+            topic: topic,
+            payload: message.toString(),
+            timestamp: new Date(),
+            color: subscriptions.find(sub => sub.topic === topic)?.color || 'white',
+        };
+        setMessages(prevMessages => [...prevMessages, newMessage].slice(-100));
+    }, [subscriptions]);
+
+    useEffect(() => {
+        if (client) {
+            client.on('message', handleMessage);
+        }
+        return () => {
+            if (client) {
+                client.off('message', handleMessage);
+            }
+        };
+    }, [handleMessage]);
 
     const handleSubscribe = useCallback((topic: string, qos: QoS.QoS, color: string) => {
         if (topic && client) {
@@ -43,18 +53,6 @@ export function useSubscriptions() {
                     console.error("Subscription error:", err);
                 } else {
                     setSubscriptions(prev => [...prev, { color, qos, topic }]);
-                    // Set up message listener
-                    const handleMessage = (topic: string, message: Buffer) => {
-                        const newMessage: Message = {
-                            topic: topic,
-                            payload: message.toString(),
-                            timestamp: new Date(),
-                            color: color,
-                        };
-                        console.log("Received message:", newMessage); // Log the message to the console
-                        setMessages(prevMessages => [...prevMessages, newMessage].slice(-100)); // Keep last 100 messages
-                    };
-                    client?.on('message', handleMessage);
                 }
             });
         }
@@ -77,5 +75,6 @@ export function useSubscriptions() {
         messages,
         handleSubscribe,
         handleRemoveSubscription,
+        handleMessage, // Export handleMessage
     };
 }
