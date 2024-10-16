@@ -109,7 +109,7 @@ export const Connection = () => {
             )}
             {text && visible && (
                 <div
-                    className={`fixed bottom-0 left-0 w-full animate-fade-out`}
+                    className={`fixed bottom-0 left-0 w-full animate-fade-out z-50 pointer-events-none`}
                 >
                     <Alert
                         variant="default"

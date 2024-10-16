@@ -49,13 +49,13 @@ export function MqttSubscriptionCard() {
             <CardContent className="space-y-4">
                 <div className="space-y-2">
                     <Label htmlFor="color-picker">Color</Label>
-                    <div className="flex items-center space-x-2 flex-shrink-0">
+                    <div className="flex items-center space-x-2 flex-shrink-0 hover:">
                         <Input
                             id="color-picker"
                             type="color"
                             value={color}
                             onChange={(e) => setColor(e.target.value)}
-                            className="h-10 w-15 p-0 border-0 appearance-none"
+                            className="h-10 w-15 p-0 border-0 appearance-none hover:cursor-pointer"
                             style={{ backgroundColor: color }}
                         />
                         <Input
@@ -100,7 +100,7 @@ export function MqttSubscriptionCard() {
                                     className="w-4 h-4 rounded-full"
                                     style={{ backgroundColor: sub.color }}
                                 />
-                                <span>{sub.topic}</span>
+                                <span className="select-all">{sub.topic}</span>
                             </div>
                             <Button
                                 variant="destructive"
